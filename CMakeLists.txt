@@ -11,7 +11,8 @@ find_package(SFML 2.5.2 COMPONENTS graphics audio REQUIRED)
 set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
-add_executable(tetris main.cpp)
+add_executable(tetris main.cpp
+    tetris.hpp tetris.cpp)
 
 set(RESOURCE_FILES
     "resources/font/font.ttf"
