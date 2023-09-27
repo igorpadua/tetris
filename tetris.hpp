@@ -13,6 +13,7 @@ public:
 protected:
     void events();
     void draw();
+    void moveToDown();
 
 private:
     std::unique_ptr<sf::RenderWindow> m_window;
@@ -26,6 +27,11 @@ private:
 
     std::vector<std::vector<std::uint32_t>> m_area;
     std::vector<std::vector<std::uint32_t>> m_forms;
+
+    struct Coords
+    {
+        std::uint32_t x, y;
+    } z[SQUARES], k[SQUARES];
 
     void closedWindow();
 };

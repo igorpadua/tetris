@@ -22,6 +22,7 @@ void Tetris::run()
 {
     while (m_window->isOpen()) {
         events();
+        moveToDown();
         draw();
     }
 }
@@ -34,8 +35,22 @@ void Tetris::events()
 void Tetris::draw()
 {
     m_window->clear(sf::Color::Black);
-    m_window->draw(*m_sprite);
+    for (std::size_t i = {}; i < SQUARES; ++i) {
+        m_sprite->setPosition(z[i].x * 36, z[i].y * 36);
+        m_window->draw(*m_sprite);
+    }
     m_window->display();
+}
+
+void Tetris::moveToDown()
+{
+    auto number = std::uint32_t(3);
+    if (z[0].x == 0) {
+        for (std::size_t i = {}; i < SQUARES; ++i) {
+            z[i].x = m_forms[number][i] % 2;
+            z[i].y = m_forms[number][i] / 2;
+        }
+    }
 }
 
 void Tetris::closedWindow()
