@@ -8,6 +8,7 @@ Tetris::Tetris() :
 
     m_tiles.loadFromFile("./resources/img/squares.png");
     m_sprite->setTexture(m_tiles);
+    m_sprite->setTextureRect(sf::IntRect(0, 0, 36, 36));
 }
 
 void Tetris::run()
