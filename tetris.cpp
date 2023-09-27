@@ -4,3 +4,13 @@ Tetris::Tetris()
 {
 
 }
+
+void Tetris::events()
+{
+
+}
+
+void Tetris::draw()
+{
+
+}
