@@ -7,6 +7,7 @@ class Tetris
 {
 public:
     Tetris();
+    void run();
 
 protected:
     void events();
@@ -15,5 +16,7 @@ private:
     std::unique_ptr<sf::RenderWindow> m_window;
     std::unique_ptr<sf::Sprite> m_sprite;
     sf::Texture m_tiles;
+
+    void closedWindow();
 };
 
