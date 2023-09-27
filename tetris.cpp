@@ -3,7 +3,14 @@
 Tetris::Tetris() :
     m_window(std::make_unique<sf::RenderWindow>(sf::VideoMode(360, 720), "Tetris", sf::Style::Titlebar | sf::Style::Close))
   , m_sprite(std::make_unique<sf::Sprite>())
+  , m_forms({{1,3,5,7},{2,4,5,7},{3,5,4,6},{3,5,4,7},{2,3,5,7},{3,5,7,6},{2,3,4,5}})
 {
+    m_area.resize(LINES);
+
+    for (auto area : m_area) {
+        area.resize(COLS);
+    }
+
     m_window->setPosition(sf::Vector2i(100, 100));
 
     m_tiles.loadFromFile("./resources/img/squares.png");
