@@ -16,7 +16,7 @@ protected:
 
 private:
     std::shared_ptr<sf::RenderWindow> window;
-    sf::Texture titles;
+    sf::Texture tiles;
     std::shared_ptr<sf::Sprite> sprite;
 };
 
