@@ -34,7 +34,10 @@ void Tetris::run()
 {
     while (window->isOpen()) {
         events();
+<<<<<<< HEAD
         moveToDow();
+=======
+>>>>>>> parent of 481dde5 (feat: criar as formas)
         draw();
     }
 }
@@ -51,6 +54,7 @@ void Tetris::events()
 
 void Tetris::draw()
 {
+<<<<<<< HEAD
     window->clear(sf::Color::Black);
     for (int i = 0; i < squares; ++i) {
         sprite->setPosition(z[i].x * 36, z[i].y * 36);
@@ -68,6 +72,20 @@ void Tetris::moveToDow()
         for (int i = 0; i < squares; ++i) {
             z[i].x = forms[number][i] & 2;
             z[i].y = forms[number][i] / 2;
+=======
+    m_window->clear(sf::Color::Black);
+    m_window->draw(*m_sprite);
+    m_window->display();
+}
+
+void Tetris::closedWindow()
+{
+    auto e = std::make_unique<sf::Event>();
+
+    while (m_window->pollEvent(*e)) {
+        if (e->type == sf::Event::Closed) {
+            m_window->close();
+>>>>>>> parent of 481dde5 (feat: criar as formas)
         }
     }
 }
