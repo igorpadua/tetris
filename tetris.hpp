@@ -8,5 +8,15 @@ class Tetris
 {
 public:
     Tetris();
+    void run();
+
+protected:
+    void events();
+    void draw();
+
+private:
+    std::shared_ptr<sf::RenderWindow> window;
+    sf::Texture titles;
+    std::shared_ptr<sf::Sprite> sprite;
 };
 
