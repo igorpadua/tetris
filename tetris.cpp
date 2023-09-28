@@ -5,10 +5,12 @@ Tetris::Tetris() :
     m_window(std::make_unique<sf::RenderWindow>(sf::VideoMode(360, 720), "Tetris", sf::Style::Titlebar | sf::Style::Close))
   , m_sprite(std::make_unique<sf::Sprite>())
   , m_forms({{1,3,5,7},{2,4,5,7},{3,5,4,6},{3,5,4,7},{2,3,5,7},{3,5,7,6},{2,3,4,5}})
+  , m_dirx(0)
+  , m_rotate(false)
 {
     m_area.resize(LINES);
 
-    for (auto area : m_area) {
+    for (auto& area : m_area) {
         area.resize(COLS);
     }
 
@@ -23,20 +25,22 @@ void Tetris::run()
 {
     while (m_window->isOpen()) {
         events();
+        changePosition();
+        setRotate();
         moveToDown();
+        resetValues();
         draw();
     }
 }
 
 void Tetris::events()
 {
-    auto e = std::make_shared<sf::Event>();
+   auto e = std::make_unique<sf::Event>();
+
     while (m_window->pollEvent(*e)) {
-        if (e->type == sf::Event::Closed) {
-            m_window->close();
-        }
+        closedWindow(*e);
+        rotate(*e);
     }
-    closedWindow();
 }
 
 void Tetris::draw()
@@ -52,7 +56,7 @@ void Tetris::draw()
 void Tetris::moveToDown()
 {
     auto number = std::uint32_t(3);
-    if (z[0].x != 0) {
+    if (z[0].x == 0) {
         for (std::size_t i = {}; i < SQUARES; ++i) {
             z[i].x = m_forms[number][i] % 2;
             z[i].y = m_forms[number][i] / 2;
@@ -60,13 +64,49 @@ void Tetris::moveToDown()
     }
 }
 
-void Tetris::closedWindow()
+void Tetris::setRotate()
 {
-    auto e = std::make_unique<sf::Event>();
+    if (m_rotate) {
+        auto coords = z[1];
+        for (int i = 0; i < SQUARES; ++i) {
+            auto x = z[i].y - coords.y;
+            auto y = z[i].x + coords.x;
 
-    while (m_window->pollEvent(*e)) {
-        if (e->type == sf::Event::Closed) {
-            m_window->close();
+            z[i].x = coords.x - x;
+            z[i].y = coords.y + y;
         }
     }
+}
+
+void Tetris::resetValues()
+{
+    m_dirx = 0;
+    m_rotate = false;
+}
+
+void Tetris::changePosition()
+{
+    for (int i = 0; i < SQUARES; ++i) {
+        z[i].x += m_dirx;
+    }
+}
+
+void Tetris::closedWindow(const sf::Event& e)
+{
+    if (e.type == sf::Event::Closed) {
+        m_window->close();
+    }
+}
+
+void Tetris::rotate(const sf::Event& e)
+{
+   if (e.type == sf::Event::KeyPressed) {
+       if (e.key.code == sf::Keyboard::Up) {
+           m_rotate = true;
+       } else if (e.key.code == sf::Keyboard::Right) {
+           ++m_dirx;
+       } else if (e.key.code == sf::Keyboard::Left) {
+           --m_dirx;
+       }
+   }
 }

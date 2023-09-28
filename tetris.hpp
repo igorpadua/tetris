@@ -14,11 +14,17 @@ protected:
     void events();
     void draw();
     void moveToDown();
+    void setRotate();
+    void resetValues();
+    void changePosition();
 
 private:
     std::unique_ptr<sf::RenderWindow> m_window;
     std::unique_ptr<sf::Sprite> m_sprite;
     sf::Texture m_tiles;
+
+    int m_dirx;
+    bool m_rotate;
 
     static const std::uint32_t LINES = 20;
     static const std::uint32_t COLS = 10;
@@ -33,6 +39,7 @@ private:
         std::uint32_t x, y;
     } z[SQUARES], k[SQUARES];
 
-    void closedWindow();
+    void closedWindow(const sf::Event& e);
+    void rotate(const sf::Event& e);
 };
 
