@@ -1,43 +1,29 @@
 #include "tetris.hpp"
 #include <iostream>
 
-Tetris::Tetris()
+Tetris::Tetris() :
+    m_window(std::make_unique<sf::RenderWindow>(sf::VideoMode(360, 720), "Tetris", sf::Style::Titlebar | sf::Style::Close))
+  , m_sprite(std::make_unique<sf::Sprite>())
+  , m_forms({{1,3,5,7},{2,4,5,7},{3,5,4,6},{3,5,4,7},{2,3,5,7},{3,5,7,6},{2,3,4,5}})
 {
-    area.resize(lines);
+    m_area.resize(LINES);
 
-    for (int i = 0; i < area.size(); ++i) {
-        area[i].resize(cols);
+    for (auto area : m_area) {
+        area.resize(COLS);
     }
 
-    z[0].x = 0;
+    m_window->setPosition(sf::Vector2i(100, 100));
 
-    forms = {
-        {1, 3, 5, 7},
-        {2, 4, 5, 7},
-        {3, 5, 4, 6},
-        {3, 5, 4, 7},
-        {2, 3, 5, 7},
-        {3, 5, 7, 6},
-        {2, 3, 4, 5}
-    };
-
-    window = std::make_shared<sf::RenderWindow>(sf::VideoMode(360, 720), "Tetris", sf::Style::Titlebar | sf::Style::Close);
-    window->setPosition(sf::Vector2i(100, 100));
-
-    tiles.loadFromFile("./resources/img/squares.png");
-    sprite = std::make_shared<sf::Sprite>();
-    sprite->setTexture(tiles);
-    sprite->setTextureRect(sf::IntRect(0, 0, 36, 36));
+    m_tiles.loadFromFile("./resources/img/squares.png");
+    m_sprite->setTexture(m_tiles);
+    m_sprite->setTextureRect(sf::IntRect(0, 0, 36, 36));
 }
 
 void Tetris::run()
 {
-    while (window->isOpen()) {
+    while (m_window->isOpen()) {
         events();
-<<<<<<< HEAD
-        moveToDow();
-=======
->>>>>>> parent of 481dde5 (feat: criar as formas)
+        moveToDown();
         draw();
     }
 }
@@ -45,37 +31,33 @@ void Tetris::run()
 void Tetris::events()
 {
     auto e = std::make_shared<sf::Event>();
-    while (window->pollEvent(*e)) {
+    while (m_window->pollEvent(*e)) {
         if (e->type == sf::Event::Closed) {
-            window->close();
+            m_window->close();
         }
     }
+    closedWindow();
 }
 
 void Tetris::draw()
 {
-<<<<<<< HEAD
-    window->clear(sf::Color::Black);
-    for (int i = 0; i < squares; ++i) {
-        sprite->setPosition(z[i].x * 36, z[i].y * 36);
-        window->draw(*sprite);
+    m_window->clear(sf::Color::Black);
+    for (int i = 0; i < SQUARES; ++i) {
+        m_sprite->setPosition(z[i].x * 36, z[i].y * 36);
+        m_window->draw(*m_sprite);
     }
-    window->display();
+    m_window->display();
 }
 
-void Tetris::moveToDow()
+void Tetris::moveToDown()
 {
-    std::uint32_t number = 3;
-
-    if (z[0].x == 0) {
-        std::cout << "entrou" << std::endl;
-        for (int i = 0; i < squares; ++i) {
-            z[i].x = forms[number][i] & 2;
-            z[i].y = forms[number][i] / 2;
-=======
-    m_window->clear(sf::Color::Black);
-    m_window->draw(*m_sprite);
-    m_window->display();
+    auto number = std::uint32_t(3);
+    if (z[0].x != 0) {
+        for (std::size_t i = {}; i < SQUARES; ++i) {
+            z[i].x = m_forms[number][i] % 2;
+            z[i].y = m_forms[number][i] / 2;
+        }
+    }
 }
 
 void Tetris::closedWindow()
@@ -85,7 +67,6 @@ void Tetris::closedWindow()
     while (m_window->pollEvent(*e)) {
         if (e->type == sf::Event::Closed) {
             m_window->close();
->>>>>>> parent of 481dde5 (feat: criar as formas)
         }
     }
 }
