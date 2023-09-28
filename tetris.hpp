@@ -17,6 +17,7 @@ protected:
     void setRotate();
     void resetValues();
     void changePosition();
+    bool maxLimit();
 
 private:
     std::unique_ptr<sf::RenderWindow> m_window;
@@ -24,7 +25,7 @@ private:
     sf::Texture m_tiles;
     sf::Clock clock;
 
-    int m_dirx;
+    int m_dirx, m_color;
     bool m_rotate;
     float m_timerCount, delay;
 

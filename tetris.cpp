@@ -9,6 +9,7 @@ Tetris::Tetris() :
   , m_rotate(false)
   , m_timerCount(0)
   , delay(0.3f)
+  , m_color(1)
 {
     m_area.resize(LINES);
 
@@ -21,6 +22,12 @@ Tetris::Tetris() :
     m_tiles.loadFromFile("./resources/img/squares.png");
     m_sprite->setTexture(m_tiles);
     m_sprite->setTextureRect(sf::IntRect(0, 0, 36, 36));
+
+    auto number = std::rand() % SHAPES;
+    for (std::size_t i = {}; i < SQUARES; ++i) {
+        z[i].x = m_forms[number][i] % 2;
+        z[i].y = m_forms[number][i] / 2;
+    }
 }
 
 void Tetris::run()
@@ -47,15 +54,25 @@ void Tetris::events()
         closedWindow(*e);
         rotate(*e);
     }
+
+    if (sf::Keyboard::isKeyPressed(sf::Keyboard::Down)) {
+        delay = 0.05f;
+    }
 }
 
 void Tetris::draw()
 {
     m_window->clear(sf::Color::Black);
-    for (int i = 0; i < SQUARES; ++i) {
-        m_sprite->setPosition(z[i].x * 36, z[i].y * 36);
-        m_window->draw(*m_sprite);
+
+    for (int i = 0; i < LINES; ++i) {
+        for (int j = 0; j < COLS; ++j) {
+            if (m_area[i][j] != 0) {
+                m_sprite->setPosition(j * 36, i * 36);
+                m_window->draw(*m_sprite);
+            }
+        }
     }
+
     m_window->display();
 }
 
@@ -63,18 +80,27 @@ void Tetris::moveToDown()
 {
     if (m_timerCount > delay) {
         for (int i = 0; i < SHAPES; ++i) {
+            k[i] = z[i];
             ++z[i].y;
         }
-        m_timerCount = 0;
     }
 
-    auto number = std::uint32_t(3);
-    if (z[0].x == 0) {
+    if (maxLimit()) {
+
+        for (int i = 0; i < SQUARES; ++i) {
+            m_area[k[i].y][k[i].x] = m_color;
+        }
+
+        m_color = std::rand() % SHAPES + 1;
+        auto number = std::rand() % SHAPES;
         for (std::size_t i = {}; i < SQUARES; ++i) {
             z[i].x = m_forms[number][i] % 2;
             z[i].y = m_forms[number][i] / 2;
         }
     }
+
+
+    m_timerCount = 0;
 }
 
 void Tetris::setRotate()
@@ -88,6 +114,12 @@ void Tetris::setRotate()
             z[i].x = coords.x - x;
             z[i].y = coords.y + y;
         }
+
+        if (maxLimit()) {
+            for (int i = 0; i < SQUARES; ++i) {
+                z[i] = k[i];
+            }
+        }
     }
 }
 
@@ -95,13 +127,31 @@ void Tetris::resetValues()
 {
     m_dirx = 0;
     m_rotate = false;
+    delay = 0.3f;
 }
 
 void Tetris::changePosition()
 {
     for (int i = 0; i < SQUARES; ++i) {
+        k[i] = z[i];
         z[i].x += m_dirx;
     }
+
+    if (maxLimit()) {
+        for (int i = 0; i < SQUARES; ++i) {
+            z[i] = k[i];
+        }
+    }
+}
+
+bool Tetris::maxLimit()
+{
+    for (int i = 0; i < SQUARES; ++i) {
+        if (z[i].x < 0 or z[i].x >= COLS or z[i].y >= LINES or m_area[z[i].y][z[i].x]) {
+            return true;
+        }
+    }
+    return false;
 }
 
 void Tetris::closedWindow(const sf::Event& e)
