@@ -7,6 +7,8 @@ Tetris::Tetris() :
   , m_forms({{1,3,5,7},{2,4,5,7},{3,5,4,6},{3,5,4,7},{2,3,5,7},{3,5,7,6},{2,3,4,5}})
   , m_dirx(0)
   , m_rotate(false)
+  , m_timerCount(0)
+  , delay(0.3f)
 {
     m_area.resize(LINES);
 
@@ -35,7 +37,11 @@ void Tetris::run()
 
 void Tetris::events()
 {
-   auto e = std::make_unique<sf::Event>();
+    auto time = clock.getElapsedTime().asSeconds();
+    clock.restart();
+    m_timerCount += time;
+
+    auto e = std::make_unique<sf::Event>();
 
     while (m_window->pollEvent(*e)) {
         closedWindow(*e);
@@ -55,6 +61,13 @@ void Tetris::draw()
 
 void Tetris::moveToDown()
 {
+    if (m_timerCount > delay) {
+        for (int i = 0; i < SHAPES; ++i) {
+            ++z[i].y;
+        }
+        m_timerCount = 0;
+    }
+
     auto number = std::uint32_t(3);
     if (z[0].x == 0) {
         for (std::size_t i = {}; i < SQUARES; ++i) {

@@ -22,9 +22,11 @@ private:
     std::unique_ptr<sf::RenderWindow> m_window;
     std::unique_ptr<sf::Sprite> m_sprite;
     sf::Texture m_tiles;
+    sf::Clock clock;
 
     int m_dirx;
     bool m_rotate;
+    float m_timerCount, delay;
 
     static const std::uint32_t LINES = 20;
     static const std::uint32_t COLS = 10;
