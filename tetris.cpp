@@ -12,7 +12,10 @@ Tetris::Tetris()
 
 void Tetris::run()
 {
-
+    while (window->isOpen()) {
+        events();
+        draw();
+    }
 }
 
 void Tetris::events()
