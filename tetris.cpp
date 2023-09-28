@@ -8,6 +8,7 @@ Tetris::Tetris()
     tiles.loadFromFile("./resources/img/squares.png");
     sprite = std::make_shared<sf::Sprite>();
     sprite->setTexture(tiles);
+    sprite->setTextureRect(sf::IntRect(0, 0, 36, 36));
 }
 
 void Tetris::run()
