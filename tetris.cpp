@@ -27,5 +27,7 @@ void Tetris::events()
 
 void Tetris::draw()
 {
-
+    window->clear(sf::Color::Black);
+    window->draw(*sprite);
+    window->display();
 }
